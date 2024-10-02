@@ -25,10 +25,13 @@ enemyX8 = random.randrange(296,444)
 enemyX9 = random.randrange(444,592)
 enemyX0 = random.randrange(592,740)
 
-
-
 enemyY = 1000
 enemyY2 = 1000
+
+jumping = False
+ygravity = 0.2
+jumheight = 12
+yvelocity = jumheight
 
 
 
@@ -46,10 +49,6 @@ CurEnemies = random.choice(nums)
 CurEnemies2 = random.choice(nums)
 
 font = pygame.font.Font('freesansbold.ttf', 20)
-
-
-
-
 
 
 while running:
@@ -70,11 +69,6 @@ while running:
     pygame.time.get_ticks()
     clock.tick(fps)
     
-    
-
-    """if round(pygame.time.get_ticks()%10000) == 0:
-        enemyspeed +=500"""
-    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -84,13 +78,18 @@ while running:
         if pressed[pygame.K_a]: playerX -= 1
     if playerX < 800 - 25:
         if pressed[pygame.K_d]: playerX += 1
+    if pressed[pygame.K_SPACE]:
+        jumping = True
+        
 
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                print("FAS")
-                pygame.time.set_timer(pressed[pygame.K_SPACE],5)
-                playerY -=15
+
+    if jumping:
+        shotgunblast = pygame.draw.circle(screen, (255, 0, 0), [playerX+34, playerY+50], 10)
+        playerY -= yvelocity
+        yvelocity -= ygravity
+        if yvelocity < -jumheight:
+            yvelocity = jumheight
+    
         
 
 
@@ -112,12 +111,18 @@ while running:
         text = font.render(f"ALL POINTS    :   {str(round(points))}", True, (255,0,0))
         textRect = text.get_rect()
         textRect.center = (380, 400)
-        screen.fill((0,0,0))
-
+        
+        """if round(points) > 600:
+            text2 = font.render(f"Nyertel egy matricat!", True, (255,0,0))
+            textRect2 = text2.get_rect()
+            textRect2.center = (380, 500)
+            
+            screen.fill((0,0,0))"""
 
 
     player = pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(playerX, playerY, 25, 25))
-
+    shotgun = pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(playerX+30, playerY, 7, 40))
+    
     
     
     if enemyY < 500:
@@ -129,9 +134,10 @@ while running:
 
     if collided:
         once = True
+        jumping = False
         playerY -= enemyspeed
-    else:
-        playerY +=5
+    elif collided == False:
+        playerY +=3
         
 
     #wave 1
@@ -208,10 +214,6 @@ while running:
         if enemyY == 400:
             athalf = False
 
-        
-        
-        
-        
     screen.blit(text, textRect)
     pygame.display.flip()
     
