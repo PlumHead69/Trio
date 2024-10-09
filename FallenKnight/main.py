@@ -89,8 +89,7 @@ while running:
         jumping = True
         duble = True
         vertical += 2
-        for i in range(20):
-            shotgunblast = pygame.draw.circle(screen, (255, 0, 0), [playerX+34, playerY+50], 10)
+       
 
     
     if jumping:
