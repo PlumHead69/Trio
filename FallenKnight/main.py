@@ -89,7 +89,8 @@ while running:
         jumping = True
         duble = True
         vertical += 2
-       
+#fasz
+    
 
     
     if jumping:
